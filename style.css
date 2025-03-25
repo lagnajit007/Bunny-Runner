@@ -32,54 +32,59 @@ body {
 /* Clouds layer */
 #clouds-layer {
     position: absolute;
-    top: 0;
-    width: 300vw; /* Wider to ensure smoother transitions */
-    height: 100vh;
+    bottom: 0;
+    width: 600vw; /* Much wider for seamless looping */
+    height: 100%;
     background: url('assets/cloud.svg') repeat-x;
     background-size: auto 100%;
-    animation: clouds-scroll 60s linear infinite; /* Slower and longer duration */
+    animation: clouds-scroll 120s linear infinite; /* Slower for smoother feel */
     z-index: 1.5;
     will-change: transform; /* Performance optimization */
+    transform: translate3d(0, 0, 0); /* Force GPU acceleration */
+    backface-visibility: hidden; /* Reduce flickering */
 }
 
 /* Trees background layer */
 #trees-layer {
     position: absolute;
-    bottom: 100px; /* Match the ground height */
-    width: 300vw; /* Wider to ensure smoother transitions */
-    height: 200px;
-    background: url('assets/trees.png') repeat-x;
+    bottom: 10px; /* Match the ground height */
+    width: 600vw; /* Much wider for seamless looping */
+    height: 120vh;
+    background: url('assets/trees.svg') repeat-x;
     background-size: auto 100%;
-    animation: trees-scroll 40s linear infinite; /* Slower and longer duration */
+    animation: trees-scroll 90s linear infinite; /* Adjusted for smoother transition */
     z-index: 2;
     will-change: transform; /* Performance optimization */
+    transform: translate3d(0, 0, 0); /* Force GPU acceleration */
+    backface-visibility: hidden; /* Reduce flickering */
 }
 
 /* Ground/foreground */
 #foreground {
     position: absolute;
     bottom: 0;
-    width: 300vw; /* Wider to ensure smoother transitions */
-    height: 500px;
+    width: 600vw; /* Much wider for seamless looping */
+    height: 130vh;
     background: url('assets/ground.svg') repeat-x;
     background-size: auto 100%;
-    animation: ground-scroll 30s linear infinite; /* Slower and longer duration */
+    animation: ground-scroll 60s linear infinite; /* Adjusted for game speed */
     z-index: 4;
     will-change: transform; /* Performance optimization */
+    transform: translate3d(0, 0, 0); /* Force GPU acceleration */
+    backface-visibility: hidden; /* Reduce flickering */
 }
 
 #character {
     position: absolute;
-    bottom: 140px; /* Match the ground height */
+    bottom: 0px; /* Match the ground height */
     left: 100px;
-    width: 160px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
     background: url('assets/Bunny.svg') no-repeat center center;
     background-size: contain;
     transition: bottom 0.3s cubic-bezier(0.7, 0, 0.3, 1), transform 0.1s linear;
     z-index: 10;
 }
-
 
 .obstacle {
     position: absolute;
@@ -88,6 +93,17 @@ body {
     background: url('assets/mushrooms.svg') no-repeat center center;
     background-size: contain;
     z-index: 5;
+}
+
+.obstacle-shadow {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: url('assets/mushroom shadow.svg') no-repeat center center;
+    background-size: contain;
+    z-index: 4;
+    bottom: 185px;
+    right: 100%; /* Center the shadow under the mushroom */
 }
 
 .collectible {
@@ -100,25 +116,6 @@ body {
     z-index: 6; /* Higher than obstacles to ensure visibility */
 }
 
-.brick {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnMSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmYTI2ZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmN2YyZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjIiIHk9IjIiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcng9IjgiIHJ5PSI4IiBmaWxsPSJ1cmwoI2cxKSIgc3Ryb2tlPSIjZmY2MzAwIiBzdHJva2Utd2lkdGg9IjQiLz48cGF0aCBkPSJNMTUsMTUgSDUwIEw0NSw0MCBMIDE1LDQ1IFoiIGZpbGw9IiNmZmM2YTUiIGZpbGwtb3BhY2l0eT0iMC41Ii8+PC9zdmc+') no-repeat center center;
-    background-size: contain;
-    z-index: 2;
-}
-
-.questionBlock {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3QgeD0iMiIgeT0iMiIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiByeD0iOCIgcnk9IjgiIGZpbGw9IiNmZmQzNTUiIHN0cm9rZT0iI2ZmYjcwMCIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHRleHQgeD0iMjMiIHk9IjQzIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIj4/PC90ZXh0Pjwvc3ZnPg==') no-repeat center center;
-    background-size: contain;
-    animation: pulse 1s infinite alternate;
-    z-index: 2;
-}
-
 #score {
     position: absolute;
     top: 20px;
@@ -128,7 +125,6 @@ body {
     text-shadow: 1px 1px 2px white;
     z-index: 100;
 }
-
 
 #health-container {
     position: absolute;
@@ -213,12 +209,12 @@ button:active {
 
 @keyframes pulse {
     0% { transform: scale(1); }
-    100% { transform: scale(1.1); }
+    100% { transform: scale(1.2); }
 }
 
 @keyframes ground-scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-66.67%); } /* Adjusted for 300vw width */
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); } /* Exactly half the width for perfect looping */
 }
 
 @keyframes spin {
@@ -227,13 +223,13 @@ button:active {
 }
 
 @keyframes trees-scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-66.67%); } /* Adjusted for 300vw width */
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); } /* Exactly half the width for perfect looping */
 }
 
 @keyframes clouds-scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-66.67%); } /* Adjusted for 300vw width */
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); } /* Exactly half the width for perfect looping */
 }
 
 @keyframes double-jump-effect {
@@ -260,4 +256,105 @@ button:active {
         padding: 10px 20px;
         font-size: 18px;
     }
+}
+
+.bunny-shadow {
+    position: absolute;
+    bottom: -20px;
+    width: 100px;
+    height: 20px;
+    background: rgba(14, 61, 0, 0.48);
+    border-radius: 50%;
+    z-index: 5;
+    transform: translateX(-50%);
+    left: 50%;
+    filter: blur(0px);
+    transform-origin: center;
+    transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+.bird {
+    position: absolute;
+    width: 70px;
+    height: 41px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 2;
+    transition: transform 0.1s ease;
+}
+
+#high-score {
+    position: absolute;
+    top: 50px; /* Position below the score */
+    left: 20px; /* Align with score */
+    font-size: 20px; /* Slightly smaller than score */
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 2px 2px 0 #000;
+    z-index: 100;
+    padding-top: 5px;
+    
+    transition: transform 0.3s ease;
+}
+
+#high-score.new-high-score {
+    animation: highScorePulse 1s ease-in-out;
+}
+
+@keyframes highScorePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+#candy-counter {
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    font-size: 24px;
+    color: #FF69B4;
+    text-shadow: 2px 2px 0 #000;
+    padding-top: 10px;
+    z-index: 100;
+}
+
+.candy {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    background-image: url('assets/candy.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 10;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    animation: float 2s ease-in-out infinite;
+}
+
+.candy::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    animation: glow 2s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes glow {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.candy-collected {
+    animation: collect 0.5s ease-out forwards;
+}
+
+@keyframes collect {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.8; }
+    100% { transform: scale(0.1); opacity: 0; }
 }
