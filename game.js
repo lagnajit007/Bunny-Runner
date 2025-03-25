@@ -550,6 +550,7 @@ function updateLevelDisplay() {
         levelDisplay.style.padding = '5px 15px';
         levelDisplay.style.borderRadius = '15px';
         levelDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        levelDisplay.style.fontFamily = "'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important";
     }
 }
 
@@ -775,6 +776,7 @@ function showInstructions() {
     instruction.style.background = 'rgba(255, 255, 255, 0.7)';
     instruction.style.borderRadius = '20px';
     instruction.style.zIndex = '100';
+    instruction.style.fontFamily = "'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important";
     gameContainer.appendChild(instruction);
     setTimeout(() => {
         instruction.style.transition = 'opacity 1s';
@@ -801,13 +803,13 @@ function endGame() {
     setTimeout(() => {
         startScreen.style.display = 'flex';
         startScreen.innerHTML = `
-            <h1>GAME OVER</h1>
-            <p>YOUR SCORE: ${score}</p>
-            <p>HIGH SCORE: ${highScore}</p>
-            <p>LEVEL REACHED: ${level}</p>
-            <p>CANDIES COLLECTED: ${candyCount}</p>
-            <p class="game-story">Your bunny friends are still waiting to be rescued! Try again!</p>
-            <button id="restart-button">PLAY AGAIN</button>
+            <h1 style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">GAME OVER</h1>
+            <p style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">YOUR SCORE: ${score}</p>
+            <p style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">HIGH SCORE: ${highScore}</p>
+            <p style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">LEVEL REACHED: ${level}</p>
+            <p style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">CANDIES COLLECTED: ${candyCount}</p>
+            <p class="game-story" style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">Your bunny friends are still waiting to be rescued! Try again!</p>
+            <button id="restart-button" style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">PLAY AGAIN</button>
         `;
         const storyElement = startScreen.querySelector('.game-story');
         if (storyElement) {
@@ -816,19 +818,71 @@ function endGame() {
             storyElement.style.fontSize = '18px';
             storyElement.style.color = '#8B4513';
             storyElement.style.fontWeight = 'bold';
+            storyElement.style.fontFamily = "'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important";
         }
+
+        // Setup Play Again button with proper mobile handling
         setTimeout(() => {
-            const restartBtn = document.getElementById('restart-button');
-            if (restartBtn) {
-                restartBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    buttonClickSound.currentTime = 0;
-                    buttonClickSound.play().catch(e => console.log("Audio play failed:", e));
-                    restartGame();
-                });
-            }
+            setupRestartButton();
         }, 50);
     }, 1000);
+}
+
+// New function to set up the Play Again button properly for mobile
+function setupRestartButton() {
+    const restartBtn = document.getElementById('restart-button');
+    if (restartBtn) {
+        // Create a fresh button to replace the existing one
+        const newBtn = document.createElement('button');
+        newBtn.id = 'restart-button';
+        newBtn.textContent = restartBtn.textContent || 'PLAY AGAIN';
+        
+        // Set critical mobile properties directly
+        newBtn.style.cursor = 'pointer';
+        newBtn.style.touchAction = 'manipulation';
+        newBtn.style.webkitTapHighlightColor = 'transparent';
+        newBtn.style.userSelect = 'none';
+        newBtn.style.WebkitUserSelect = 'none';
+        newBtn.style.fontFamily = "'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important";
+        
+        // Replace old button with new one
+        if (restartBtn.parentNode) {
+            restartBtn.parentNode.replaceChild(newBtn, restartBtn);
+        } else if (startScreen) {
+            startScreen.appendChild(newBtn);
+        }
+        
+        // Add event listeners for both click and touch
+        newBtn.onclick = handleRestartGame;
+        newBtn.ontouchstart = function(e) {
+            e.preventDefault();
+            handleRestartGame(e);
+        };
+        
+        // Add a direct inline handler as a fallback
+        newBtn.setAttribute('ontouchstart', 'this.onclick(); event.preventDefault();');
+    }
+}
+
+// Separate restart game handler function
+function handleRestartGame(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    // Play button click sound
+    buttonClickSound.currentTime = 0;
+    buttonClickSound.play().catch(e => console.log("Audio play failed:", e));
+    
+    // Restart the game
+    restartGame();
+}
+
+// Restart game
+function restartGame() {
+    clearAllColliders();
+    startGame();
 }
 
 // Clear all game elements
@@ -855,232 +909,6 @@ function clearAllColliders() {
     candies.forEach(candy => candy.remove());
     candies = [];
 }
-
-// Restart game
-function restartGame() {
-    buttonClickSound.currentTime = 0;
-    buttonClickSound.play().catch(e => console.log("Audio play failed:", e));
-    clearAllColliders();
-    startGame();
-}
-
-// Initialize game
-function initGame() {
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes hit {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0); }
-        }
-        @keyframes level-up {
-            0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
-            50% { transform: translate(-50%, 0) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
-        }
-        @keyframes bounce {
-            0% { transform: scale(1); }
-            25% { transform: scale(1.1); }
-            50% { transform: scale(1.15); }
-            75% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.2); }
-        }
-        @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
-        }
-        .score-bounce {
-            animation: bounce 0.5s ease;
-        }
-        .level-up-animation {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, 0);
-            font-size: 36px;
-            font-weight: bold;
-            color: gold;
-            text-shadow: 3px 3px 0 #000;
-            z-index: 1000;
-            animation: level-up 2s ease-out forwards;
-        }
-        .speech-bubble {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            border: 2px solid #333;
-            border-radius: 16px;
-            padding: 5px 8px;
-            font-size: 10px;
-            font-weight: bold;
-            white-space: nowrap;
-            z-index: 200;
-            box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
-            animation: bubblePop 0.5s ease-out;
-            color: #222;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-        }
-        .speech-bubble:after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 16px;
-            height: 10px;
-            background: white;
-            border-left: 2px solid #333;
-            border-right: 2px solid #333;
-            border-bottom: 2px solid #333;
-            border-radius: 0 0 8px 8px;
-            border-top: none;
-            box-sizing: border-box;
-        }
-        @keyframes bubblePop {
-            0% { transform: translateX(-50%) scale(0); opacity: 0; }
-            50% { transform: translateX(-50%) scale(1.2); opacity: 1; }
-            70% { transform: translateX(-50%) scale(0.9); opacity: 1; }
-            85% { transform: translateX(-50%) scale(1.1); opacity: 1; }
-            100% { transform: translateX(-50%) scale(1); opacity: 1; }
-        }
-        .speech-bubble.special {
-            background: #FFFDD0;
-            border-color: #FFD700;
-            color: #CC7722;
-        }
-        .speech-bubble.special:after {
-            background: #FFFDD0;
-            border-left-color: #FFD700;
-            border-right-color: #FFD700;
-            border-bottom-color: #FFD700;
-        }
-        .new-high-score {
-            animation: bounce 0.5s ease;
-            color: gold;
-        }
-        /* Optimize for mobile */
-        body {
-            touch-action: manipulation; /* Prevent double-tap zoom */
-            -webkit-user-select: none; /* Disable text selection */
-            user-select: none;
-        }
-        #game-container {
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-        #character {
-            will-change: transform, bottom; /* Optimize for animations */
-        }
-        .obstacle, .collectible, .platform, .candy, .bird {
-            will-change: right; /* Optimize for movement */
-        }
-    `;
-    document.head.appendChild(style);
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
-    document.addEventListener('touchstart', handleTouchStart, { passive: false });
-    initSounds();
-    
-    // Properly initialize the start screen
-    if (startScreen) {
-        if (!document.querySelector('.game-story')) {
-            const storyElement = document.createElement('p');
-            storyElement.classList.add('game-story');
-            storyElement.innerHTML = 'The evil mushrooms have trapped your bunny friends!<br>Collect carrots and hop through levels to rescue them!';
-            storyElement.style.textAlign = 'center';
-            storyElement.style.margin = '10px 0 20px';
-            storyElement.style.lineHeight = '1.4';
-            storyElement.style.fontSize = '18px';
-            storyElement.style.color = '#8B4513';
-            storyElement.style.fontWeight = 'bold';
-            storyElement.style.maxWidth = '80%';
-            if (startButton) {
-                startScreen.insertBefore(storyElement, startButton);
-            } else {
-                startScreen.appendChild(storyElement);
-            }
-        }
-    }
-
-    // Completely replace the start button with a new one
-    setupStartButton();
-    
-    character.style.display = 'none';
-}
-
-// Separate function to set up the start button properly
-function setupStartButton() {
-    // Try to get the button by ID first
-    let startBtn = document.getElementById('start-button');
-    
-    // If button doesn't exist, create it
-    if (!startBtn && startScreen) {
-        startBtn = document.createElement('button');
-        startBtn.id = 'start-button';
-        startBtn.textContent = 'START GAME';
-        startScreen.appendChild(startBtn);
-    }
-    
-    // If we have a button, set it up properly
-    if (startBtn) {
-        // Create a fresh button to replace the existing one
-        const newBtn = document.createElement('button');
-        newBtn.id = 'start-button';
-        newBtn.textContent = startBtn.textContent || 'START GAME';
-        
-        // Set critical mobile properties directly
-        newBtn.style.cursor = 'pointer';
-        newBtn.style.touchAction = 'manipulation';
-        newBtn.style.webkitTapHighlightColor = 'transparent';
-        newBtn.style.userSelect = 'none';
-        newBtn.style.WebkitUserSelect = 'none';
-        
-        // Replace old button with new one
-        if (startBtn.parentNode) {
-            startBtn.parentNode.replaceChild(newBtn, startBtn);
-        } else if (startScreen) {
-            startScreen.appendChild(newBtn);
-        }
-        
-        // Add event listeners - use only touchstart for mobile
-        newBtn.onclick = handleStartGame;
-        newBtn.ontouchstart = function(e) {
-            e.preventDefault(); // Critical for mobile
-            handleStartGame(e);
-        };
-        
-        // Add a direct inline handler as a fallback
-        newBtn.setAttribute('ontouchstart', 'this.onclick(); event.preventDefault();');
-    }
-}
-
-// Separate start game handler function
-function handleStartGame(e) {
-    if (e) {
-        e.preventDefault(); // Prevent any default behavior
-        e.stopPropagation(); // Stop event bubbling
-    }
-    
-    // Play button click sound
-    buttonClickSound.currentTime = 0;
-    buttonClickSound.play().catch(e => console.log("Audio play failed:", e));
-    
-    // Start the game
-    startGame();
-}
-
-// Initialize game on load
-window.addEventListener('DOMContentLoaded', initGame);
-window.addEventListener('load', setupStartButton); // Run again on full load to be safe
 
 // Update candy counter
 function updateCandyCounter() {
@@ -1179,6 +1007,7 @@ function showBunnySpeechBubble(messageOrPoints) {
     document.querySelectorAll('.speech-bubble').forEach(bubble => bubble.remove());
     const bubble = document.createElement('div');
     bubble.classList.add('speech-bubble');
+    bubble.style.fontFamily = "'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important";
     const messages = {
         regular: ['Carrot-astic!', 'Hop-tastic!', 'Nom nom nom!', 'Bunny approved!', 'Crunchy good!'],
         special: ['Hop-diggity!', 'Carrot jackpot!', 'Bunny heaven!', 'Ear-resistible!', 'Super-duper!']
@@ -1378,3 +1207,256 @@ function resetHighScore() {
     localStorage.removeItem('bunnyGameHighScore');
     updateHighScoreDisplay();
 }
+
+// Initialize game
+function initGame() {
+    // Add web font import for Comic Sans MS
+    const fontLink = document.createElement('link');
+    fontLink.rel = 'stylesheet';
+    fontLink.href = 'https://fonts.cdnfonts.com/css/comic-sans-ms-4';
+    document.head.appendChild(fontLink);
+    
+    // Add font family rules directly to document
+    const fontStyle = document.createElement('style');
+    fontStyle.textContent = `
+        @font-face {
+            font-family: 'Comic Sans MS';
+            src: local('Comic Sans MS'),
+                local('ComicSansMS'),
+                url('https://fonts.cdnfonts.com/s/14288/COMIC.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        body, button, p, h1, h2, h3, div {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+        }
+    `;
+    document.head.appendChild(fontStyle);
+    
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes hit {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+        @keyframes level-up {
+            0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+            50% { transform: translate(-50%, 0) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+        }
+        @keyframes bounce {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1.15); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2); }
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        .score-bounce {
+            animation: bounce 0.5s ease;
+        }
+        .level-up-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            font-size: 36px;
+            font-weight: bold;
+            color: gold;
+            text-shadow: 3px 3px 0 #000;
+            z-index: 1000;
+            animation: level-up 2s ease-out forwards;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+        }
+        .speech-bubble {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 2px solid #333;
+            border-radius: 16px;
+            padding: 5px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+            z-index: 200;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+            animation: bubblePop 0.5s ease-out;
+            color: #222;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+        }
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 10px;
+            background: white;
+            border-left: 2px solid #333;
+            border-right: 2px solid #333;
+            border-bottom: 2px solid #333;
+            border-radius: 0 0 8px 8px;
+            border-top: none;
+            box-sizing: border-box;
+        }
+        @keyframes bubblePop {
+            0% { transform: translateX(-50%) scale(0); opacity: 0; }
+            50% { transform: translateX(-50%) scale(1.2); opacity: 1; }
+            70% { transform: translateX(-50%) scale(0.9); opacity: 1; }
+            85% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+            100% { transform: translateX(-50%) scale(1); opacity: 1; }
+        }
+        .speech-bubble.special {
+            background: #FFFDD0;
+            border-color: #FFD700;
+            color: #CC7722;
+        }
+        .speech-bubble.special:after {
+            background: #FFFDD0;
+            border-left-color: #FFD700;
+            border-right-color: #FFD700;
+            border-bottom-color: #FFD700;
+        }
+        .new-high-score {
+            animation: bounce 0.5s ease;
+            color: gold;
+        }
+        /* Optimize for mobile */
+        body {
+            touch-action: manipulation; /* Prevent double-tap zoom */
+            -webkit-user-select: none; /* Disable text selection */
+            user-select: none;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+        }
+        #game-container {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        #character {
+            will-change: transform, bottom; /* Optimize for animations */
+        }
+        .obstacle, .collectible, .platform, .candy, .bird {
+            will-change: right; /* Optimize for movement */
+        }
+        #score, #high-score, #candy-counter, #level-display {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+        }
+        #start-screen h1, #start-screen p, #start-screen button {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+        }
+    `;
+    document.head.appendChild(style);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+    document.addEventListener('touchstart', handleTouchStart, { passive: false });
+    initSounds();
+    
+    // Properly initialize the start screen
+    if (startScreen) {
+        if (!document.querySelector('.game-story')) {
+            const storyElement = document.createElement('p');
+            storyElement.classList.add('game-story');
+            storyElement.innerHTML = 'The evil mushrooms have trapped your bunny friends!<br>Collect carrots and hop through levels to rescue them!';
+            storyElement.style.textAlign = 'center';
+            storyElement.style.margin = '10px 0 20px';
+            storyElement.style.lineHeight = '1.4';
+            storyElement.style.fontSize = '18px';
+            storyElement.style.color = '#8B4513';
+            storyElement.style.fontWeight = 'bold';
+            storyElement.style.maxWidth = '80%';
+            storyElement.style.fontFamily = "'Comic Sans MS', 'Comic Sans', cursive, sans-serif";
+            if (startButton) {
+                startScreen.insertBefore(storyElement, startButton);
+            } else {
+                startScreen.appendChild(storyElement);
+            }
+        }
+    }
+
+    // Completely replace the start button with a new one
+    setupStartButton();
+    
+    character.style.display = 'none';
+}
+
+// Separate function to set up the start button properly
+function setupStartButton() {
+    // Try to get the button by ID first
+    let startBtn = document.getElementById('start-button');
+    
+    // If button doesn't exist, create it
+    if (!startBtn && startScreen) {
+        startBtn = document.createElement('button');
+        startBtn.id = 'start-button';
+        startBtn.textContent = 'START GAME';
+        startScreen.appendChild(startBtn);
+    }
+    
+    // If we have a button, set it up properly
+    if (startBtn) {
+        // Create a fresh button to replace the existing one
+        const newBtn = document.createElement('button');
+        newBtn.id = 'start-button';
+        newBtn.textContent = startBtn.textContent || 'START GAME';
+        
+        // Set critical mobile properties directly
+        newBtn.style.cursor = 'pointer';
+        newBtn.style.touchAction = 'manipulation';
+        newBtn.style.webkitTapHighlightColor = 'transparent';
+        newBtn.style.userSelect = 'none';
+        newBtn.style.WebkitUserSelect = 'none';
+        newBtn.style.fontFamily = "'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important";
+        
+        // Replace old button with new one
+        if (startBtn.parentNode) {
+            startBtn.parentNode.replaceChild(newBtn, startBtn);
+        } else if (startScreen) {
+            startScreen.appendChild(newBtn);
+        }
+        
+        // Add event listeners - use only touchstart for mobile
+        newBtn.onclick = handleStartGame;
+        newBtn.ontouchstart = function(e) {
+            e.preventDefault(); // Critical for mobile
+            handleStartGame(e);
+        };
+        
+        // Add a direct inline handler as a fallback
+        newBtn.setAttribute('ontouchstart', 'this.onclick(); event.preventDefault();');
+    }
+}
+
+// Separate start game handler function
+function handleStartGame(e) {
+    if (e) {
+        e.preventDefault(); // Prevent any default behavior
+        e.stopPropagation(); // Stop event bubbling
+    }
+    
+    // Play button click sound
+    buttonClickSound.currentTime = 0;
+    buttonClickSound.play().catch(e => console.log("Audio play failed:", e));
+    
+    // Start the game
+    startGame();
+}
+
+// Initialize game on load
+window.addEventListener('DOMContentLoaded', initGame);
+window.addEventListener('load', setupStartButton); // Run again on full load to be safe

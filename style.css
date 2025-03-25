@@ -1,17 +1,21 @@
+/* Web font import for Comic Sans MS */
+@import url('https://fonts.cdnfonts.com/css/comic-sans-ms-4');
+
 @font-face {
     font-family: 'Comic Sans MS';
     src: local('Comic Sans MS'),
-         local('Comic Sans'),
-         local('Comic Sans MS Regular');
+         local('ComicSansMS'),
+         url('https://fonts.cdnfonts.com/s/14288/COMIC.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -21,6 +25,11 @@ body {
     src: url('https://fonts.gstatic.com/s/pressstart2p/v9/e3t4euO8T-267oIAQAu6jDQyK3nVivM.woff2') format('woff2');
 }
 
+/* Apply Comic Sans MS to all text elements */
+body, button, p, h1, h2, h3, div, span {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+}
+
 #game-container {
     position: relative;
     width: 100vw;
@@ -28,6 +37,23 @@ body {
     background: url('assets/sky.png') no-repeat center center;
     background-size: cover;
     overflow: hidden;
+}
+
+/* Update all elements that display text */
+#score, #high-score, #candy-counter, #level-display, .points-animation, .speech-bubble, 
+.game-story, #start-screen h1, #start-screen p, #touch-instruction, #key-instruction {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+}
+
+/* Mobile-specific text styles */
+@media (max-width: 768px) {
+    body, button, p, h1, h2, h3, div, span {
+        font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+    }
+    
+    #start-screen h1, #start-screen p, button {
+        font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+    }
 }
 
 /* Sky background with clouds */
@@ -135,7 +161,6 @@ body {
     color: #8b4513;
     text-shadow: 1px 1px 2px white;
     z-index: 100;
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
 }
 
 #health-container {
@@ -173,7 +198,6 @@ body {
     font-size: 48px;
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
 }
 
 button {
@@ -186,7 +210,6 @@ button {
     border-radius: 30px;
     box-shadow: 0 5px 0 #d67e00;
     transition: all 0.1s;
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
     -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
     touch-action: manipulation; /* Optimize for touch */
     user-select: none; /* Prevent text selection */
@@ -212,7 +235,6 @@ button:active {
         min-width: 250px; /* Larger minimum width for mobile */
         min-height: 70px; /* Larger minimum height for mobile */
         margin: 10px 0; /* Add some vertical spacing */
-        font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
     }
 
     button:active {
@@ -236,7 +258,6 @@ button:active {
     text-shadow: 1px 1px 2px white;
     animation: float-up 1s forwards;
     z-index: 100;
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
 }
 
 @keyframes float-up {
@@ -289,18 +310,15 @@ button:active {
     
     #score {
         font-size: 20px;
-        font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
     }
     
     #start-screen h1 {
         font-size: 36px;
-        font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
     }
     
     button {
         padding: 10px 20px;
         font-size: 18px;
-        font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
     }
 }
 
@@ -340,9 +358,6 @@ button:active {
     text-shadow: 2px 2px 0 #000;
     z-index: 100;
     padding-top: 5px;
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
-    
-    transition: transform 0.3s ease;
 }
 
 #high-score.new-high-score {
@@ -364,7 +379,6 @@ button:active {
     text-shadow: 2px 2px 0 #000;
     padding-top: 10px;
     z-index: 100;
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
 }
 
 .candy {
@@ -423,19 +437,10 @@ button:active {
     box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
     animation: bubblePop 0.5s ease-out;
     color: #222;
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
 }
 
 @keyframes bubblePop {
     0% { transform: scale(0); opacity: 0; }
     50% { transform: scale(1); opacity: 1; }
     100% { transform: scale(1.2); opacity: 0; }
-}
-
-/* Remove JavaScript code from CSS file */
-
-@media (max-width: 768px) {
-    #score, #start-screen h1, button {
-        font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
-    }
 }
