@@ -1,4 +1,4 @@
-# 🐰 Bunny Hop Adventure
+# 🐰 Bunny Runner
 
 ![Bunny Runner Game](assets/thumbnail.png)
 
