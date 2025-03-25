@@ -44,7 +44,6 @@ Want to run this locally? Just clone the repository and open `index.html` in you
 ```bash
 git clone https://github.com/lagnajit007/Bunny-Runner.git
 cd Bunny-Runner
-# Open index.html in your browser
 ```
 
 ## 🌟 Enjoy the Game!
