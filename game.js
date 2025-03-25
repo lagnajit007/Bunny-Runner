@@ -694,17 +694,23 @@ function gameLoop(timestamp) {
 
 // Start game
 function startGame() {
-    buttonClickSound.currentTime = 0;
-    buttonClickSound.play().catch(e => console.log("Audio play failed:", e));
-    initSounds();
+    // Ensure the start screen is hidden
+    if (startScreen) {
+        startScreen.style.display = 'none';
+    }
+    
+    // Reset game state
     level = 1;
     levelProgress = 0;
     scoreToNextLevel = 100;
     levelCandyCollected = false;
+    
+    // Initialize game elements
     createLevelDisplay();
     updateLevelDisplay();
-    startScreen.style.display = 'none';
     scoreDisplay.textContent = 'SCORE: 0';
+    
+    // Setup character
     character.style.display = 'block';
     character.style.transform = 'scaleX(1)';
     character.style.transition = 'transform 0.1s ease, filter 0.3s ease';
@@ -713,6 +719,8 @@ function startGame() {
     character.style.filter = 'none';
     character.style.opacity = '1';
     character.style.backgroundImage = "url('assets/Bunny.svg')";
+    
+    // Initialize game state
     createBunnyShadow();
     health = 3;
     updateHealthDisplay();
@@ -730,8 +738,12 @@ function startGame() {
     collectibleInterval = 2000;
     platformInterval = 4000;
     blockInterval = 5000;
+    
+    // Start background music
     bgMusic.currentTime = 0;
     bgMusic.play().catch(e => console.log("Audio play failed:", e));
+    
+    // Initialize game elements
     createInitialGameElements();
     updateDifficultyForLevel();
     startBunnyBlinking();
@@ -739,10 +751,12 @@ function startGame() {
     candyCount = 0;
     updateCandyCounter();
     
+    // Place level end candy after a delay
     setTimeout(() => {
         if (!gameOver) placeLevelEndCandy();
     }, 5000);
     
+    // Start game loop
     lastTime = performance.now();
     requestAnimationFrame(gameLoop);
 }
@@ -975,6 +989,8 @@ function initGame() {
     document.addEventListener('keyup', handleKeyUp);
     document.addEventListener('touchstart', handleTouchStart, { passive: false });
     initSounds();
+    
+    // Properly initialize the start screen
     if (startScreen) {
         if (!document.querySelector('.game-story')) {
             const storyElement = document.createElement('p');
@@ -987,31 +1003,90 @@ function initGame() {
             storyElement.style.color = '#8B4513';
             storyElement.style.fontWeight = 'bold';
             storyElement.style.maxWidth = '80%';
-            startScreen.insertBefore(storyElement, startButton);
+            if (startButton) {
+                startScreen.insertBefore(storyElement, startButton);
+            } else {
+                startScreen.appendChild(storyElement);
+            }
         }
     }
-    const startBtn = document.getElementById('start-button');
-    if (startBtn) {
-        startBtn.replaceWith(startBtn.cloneNode(true));
-        const freshStartBtn = document.getElementById('start-button');
-        freshStartBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            buttonClickSound.currentTime = 0;
-            buttonClickSound.play().catch(() => {});
-            startGame();
-        });
-    }
+
+    // Completely replace the start button with a new one
+    setupStartButton();
+    
     character.style.display = 'none';
 }
+
+// Separate function to set up the start button properly
+function setupStartButton() {
+    // Try to get the button by ID first
+    let startBtn = document.getElementById('start-button');
+    
+    // If button doesn't exist, create it
+    if (!startBtn && startScreen) {
+        startBtn = document.createElement('button');
+        startBtn.id = 'start-button';
+        startBtn.textContent = 'START GAME';
+        startScreen.appendChild(startBtn);
+    }
+    
+    // If we have a button, set it up properly
+    if (startBtn) {
+        // Create a fresh button to replace the existing one
+        const newBtn = document.createElement('button');
+        newBtn.id = 'start-button';
+        newBtn.textContent = startBtn.textContent || 'START GAME';
+        
+        // Set critical mobile properties directly
+        newBtn.style.cursor = 'pointer';
+        newBtn.style.touchAction = 'manipulation';
+        newBtn.style.webkitTapHighlightColor = 'transparent';
+        newBtn.style.userSelect = 'none';
+        newBtn.style.WebkitUserSelect = 'none';
+        
+        // Replace old button with new one
+        if (startBtn.parentNode) {
+            startBtn.parentNode.replaceChild(newBtn, startBtn);
+        } else if (startScreen) {
+            startScreen.appendChild(newBtn);
+        }
+        
+        // Add event listeners - use only touchstart for mobile
+        newBtn.onclick = handleStartGame;
+        newBtn.ontouchstart = function(e) {
+            e.preventDefault(); // Critical for mobile
+            handleStartGame(e);
+        };
+        
+        // Add a direct inline handler as a fallback
+        newBtn.setAttribute('ontouchstart', 'this.onclick(); event.preventDefault();');
+    }
+}
+
+// Separate start game handler function
+function handleStartGame(e) {
+    if (e) {
+        e.preventDefault(); // Prevent any default behavior
+        e.stopPropagation(); // Stop event bubbling
+    }
+    
+    // Play button click sound
+    buttonClickSound.currentTime = 0;
+    buttonClickSound.play().catch(e => console.log("Audio play failed:", e));
+    
+    // Start the game
+    startGame();
+}
+
+// Initialize game on load
+window.addEventListener('DOMContentLoaded', initGame);
+window.addEventListener('load', setupStartButton); // Run again on full load to be safe
 
 // Update candy counter
 function updateCandyCounter() {
     const candyCounter = document.getElementById('candy-counter');
     if (candyCounter) candyCounter.textContent = `🍬=${candyCount}`;
 }
-
-// Initialize game on load
-window.addEventListener('load', initGame);
 
 // Handle window resize
 window.addEventListener('resize', () => {
