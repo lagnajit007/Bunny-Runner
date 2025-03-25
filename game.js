@@ -809,7 +809,7 @@ function endGame() {
             <p style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">LEVEL REACHED: ${level}</p>
             <p style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">CANDIES COLLECTED: ${candyCount}</p>
             <p class="game-story" style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">Your bunny friends are still waiting to be rescued! Try again!</p>
-            <button id="restart-button" style="font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;">PLAY AGAIN</button>
+            <button id="restart-button">PLAY AGAIN</button>
         `;
         const storyElement = startScreen.querySelector('.game-story');
         if (storyElement) {
@@ -844,6 +844,17 @@ function setupRestartButton() {
         newBtn.style.userSelect = 'none';
         newBtn.style.WebkitUserSelect = 'none';
         newBtn.style.fontFamily = "'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important";
+        
+        // Ensure consistent button styling with CSS
+        newBtn.style.padding = '15px 30px';
+        newBtn.style.fontSize = '20px';
+        newBtn.style.background = '#ff9500';
+        newBtn.style.color = 'white';
+        newBtn.style.border = 'none';
+        newBtn.style.borderRadius = '30px';
+        newBtn.style.boxShadow = '0 5px 0 #d67e00';
+        newBtn.style.minWidth = '200px';
+        newBtn.style.minHeight = '60px';
         
         // Replace old button with new one
         if (restartBtn.parentNode) {
@@ -1422,6 +1433,17 @@ function setupStartButton() {
         newBtn.style.userSelect = 'none';
         newBtn.style.WebkitUserSelect = 'none';
         newBtn.style.fontFamily = "'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important";
+        
+        // Ensure consistent button styling with CSS
+        newBtn.style.padding = '15px 30px';
+        newBtn.style.fontSize = '20px';
+        newBtn.style.background = '#ff9500';
+        newBtn.style.color = 'white';
+        newBtn.style.border = 'none';
+        newBtn.style.borderRadius = '30px';
+        newBtn.style.boxShadow = '0 5px 0 #d67e00';
+        newBtn.style.minWidth = '200px';
+        newBtn.style.minHeight = '60px';
         
         // Replace old button with new one
         if (startBtn.parentNode) {

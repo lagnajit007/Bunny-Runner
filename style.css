@@ -200,6 +200,7 @@ body, button, p, h1, h2, h3, div, span {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Update button styles to be consistent across devices */
 button {
     padding: 15px 30px;
     font-size: 20px;
@@ -210,6 +211,7 @@ button {
     border-radius: 30px;
     box-shadow: 0 5px 0 #d67e00;
     transition: all 0.1s;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
     -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
     touch-action: manipulation; /* Optimize for touch */
     user-select: none; /* Prevent text selection */
@@ -227,26 +229,41 @@ button:active {
     box-shadow: none;
 }
 
-/* Mobile-specific button styles */
+/* Mobile-specific changes but NOT for buttons */
 @media (max-width: 768px) {
+    #character {
+        left: 50px;
+    }
+    
+    #score {
+        font-size: 20px;
+    }
+    
+    #start-screen h1 {
+        font-size: 36px;
+    }
+    
+    /* Remove button-specific styling differences for mobile */
+    /*
     button {
-        padding: 20px 40px; /* Larger padding for better touch targets */
-        font-size: 24px; /* Larger font size for better readability */
-        min-width: 250px; /* Larger minimum width for mobile */
-        min-height: 70px; /* Larger minimum height for mobile */
-        margin: 10px 0; /* Add some vertical spacing */
+        padding: 10px 20px;
+        font-size: 18px;
     }
-
-    button:active {
-        transform: translateY(3px); /* Slightly reduced movement for mobile */
-    }
+    */
 }
 
-/* Add touch-specific styles */
+/* Add touch-specific styles without changing visual appearance */
 @media (hover: none) and (pointer: coarse) {
     button:hover {
-        transform: none; /* Disable hover effect on touch devices */
+        /* Don't apply hover effect on touch devices, but keep appearance the same */
+        transform: none;
         box-shadow: 0 5px 0 #d67e00;
+    }
+    
+    button:active {
+        /* Keep the active state consistent for touch */
+        transform: translateY(5px);
+        box-shadow: none;
     }
 }
 
@@ -300,26 +317,6 @@ button:active {
     0% { filter: brightness(1) hue-rotate(0deg); }
     50% { filter: brightness(1.6) hue-rotate(30deg) saturate(1.5); }
     100% { filter: brightness(1) hue-rotate(0deg); }
-}
-
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-    #character {
-        left: 50px;
-    }
-    
-    #score {
-        font-size: 20px;
-    }
-    
-    #start-screen h1 {
-        font-size: 36px;
-    }
-    
-    button {
-        padding: 10px 20px;
-        font-size: 18px;
-    }
 }
 
 .bunny-shadow {
